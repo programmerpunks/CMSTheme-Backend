@@ -1,4 +1,3 @@
-const AdminModel = require('../models/admin.js')
 const UserModel = require('../models/user.js')
 // const UserModel = require('../models/user.js')
 const dotenv = require ('dotenv')
@@ -7,13 +6,13 @@ dotenv.config()
 
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { email } = req.body;
   try {
-    if (await AdminModel.findOne({ email: email }).exec()) {
+    if (await UserModel.findOne({ email: email }).exec()) {
       res.status(201).json({ message: false, error: 'Already Exists' });
     }
     else {
-      let admin = await AdminModel.create({ name, email, password });
+      let admin = await UserModel.create(req.body);
       res.status(201).json({ message: true, admin });
     }
   }
@@ -26,7 +25,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    let admin = await AdminModel.findOne({ email: email })
+    let admin = await UserModel.findOne({ email: email })
     if (!admin)
       return res.status(201).json({ message: false, error: 'User not found' })
 
@@ -46,7 +45,7 @@ const login = async (req, res) => {
       { expiresIn: "3h" },
       (err, token) => {
         try {
-          return res.status(201).json({ message: true, token, admin });
+          return res.status(201).json({ message: true, token, role: 'admin',admin });
         } catch (error) {
           return res.status(202).json({ message: false, error: error.message });
         }
@@ -58,12 +57,32 @@ const login = async (req, res) => {
   }
 }
 
-const registerUser = async (req, res) => {
-  const {firstName, lastName, email, password } = req.body
-
-  let user = await UserModel.create({firstName, lastName, email, password})
-
-
+const fetchUsers = async (req, res) => {
+  try{
+    const users = await UserModel.find()
+    return res.status(201).json({ success: true, users })
+  }catch (error) {
+    return res.status(202).json({ success: false, error: error.message })
+  }
 }
 
-module.exports = {register, login, registerUser}
+const registerUser = async (req, res) => {
+  try{
+    let user = await UserModel.create(req.body.formData)
+    return res.status(201).json({ success: true })
+  }catch (error) {
+    return res.status(202).json({ success: false, error: error.message })
+  }
+}
+
+const deleteUser = async (req, res) => {
+  try{
+    await UserModel.deleteOne({_id: req.params.uid})
+    return res.status(201).json({ success: true })
+  }
+  catch (error) {
+  return res.status(202).json({ success: false, error: error.message })
+}
+}
+
+module.exports = { register, login, registerUser, fetchUsers, deleteUser }

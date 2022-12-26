@@ -9,16 +9,20 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     validate: [isEmail, 'invalid email'],
   },
-  firstName: { type: String, required: true, minLength: 2 },
-  lastName: { type: String, required: true, minLength: 2 },
+  firstname: { type: String, required: true, minLength: 2 },
+  lastname: { type: String, required: true, minLength: 2 },
   password: {
     type: String,
     required: true,
     min: 8,
     match: [
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@$.!%*#?&]{8,}$/,
-      'Please enter a valid password',
+      'Password should have 8 characters containg atleast 1 upper, 1 lower and 1 digit',
     ],
+  },
+  contact:{
+    type: Number,
+    required: true
   },
   profile_image: {
     type: String
@@ -26,8 +30,7 @@ const UserSchema = new mongoose.Schema({
   expires: {
     type: String
   }
-
-})
+}, {timestamps: true})
 
 UserSchema.pre('save', async function (next) {
   const user = this
