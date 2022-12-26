@@ -2,9 +2,9 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
-const userRoutes = require('./src/routes/user.js')
-const tweetRoutes = require('./src/routes/tweets.js')
-require('./src/service/db')
+const userRoutes = require('./routes/user.js')
+const adminRoutes = require('./routes/admin.js')
+require('./service/db')
 require('dotenv').config()
 
 const app = express()
@@ -12,6 +12,11 @@ const app = express()
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+app.use('/admin', adminRoutes)
+app.use('/users', userRoutes)
+
+
 
 const PORT = process.env.PORT || 8000
 app.listen(PORT, () => {
