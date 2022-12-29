@@ -6,9 +6,7 @@ const { login, CMS, fetchTemplate} = require('../controllers/user.js')
 
 router.post('/login', userValidation.validate('signin'), login)
 router.use(auth.verifyToken)
-router.post('/cms/:tid', CMS)
+router.post('/cms', CMS)
 router.post('/template', fetchTemplate)
-
-
 
 module.exports = router

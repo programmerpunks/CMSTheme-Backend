@@ -7,7 +7,7 @@ const TemplateSchema = new mongoose.Schema({
     type: String
   }, 
   description:{
-    type: Array
+    type: String
   }, 
   images: {
     type: Array

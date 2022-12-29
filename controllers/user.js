@@ -24,12 +24,22 @@ const login = async (req, res, next) => {
 }
 
 const CMS = async (req, res, next) => {
+  let {data} = req.body
   try{
-    let template = await TemplateModel.find({user: req.body.user})
+
+    let template = await TemplateModel.find({user: req.verified.user._id})
     if(template.length===0){
-      template = await TemplateModel.create(req.body)
+      template = await TemplateModel.create(req.body.data)
     }else{
-      template = await TemplateModel.findByIdAndUpdate({_id: req.params.tid},req.body,{new: true})
+      let {images, storedImages} = req.body.data
+      let merged=[]
+      if(storedImages.length !==0){
+        images.concat(storedImages)
+        merged = [...images, ...storedImages]
+        data.images=merged
+      }
+
+      template = await TemplateModel.findOneAndUpdate({user:req.verified.user._id},data,{new: true})
     }
     return res.status(202).json({ success: true, template});
 
@@ -50,7 +60,6 @@ const fetchTemplate = async (req, res, next) => {
   } catch (error) {
   return res.status(202).json({ success: false, error: error.message });
   }
-
 }
 
 module.exports = {login, CMS, fetchTemplate}
