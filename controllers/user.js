@@ -13,6 +13,7 @@ const login = async (req, res, next) => {
         errors.push(error.message)
         return res.status(202).json({ success: false, errors })
       }
+
       const body = { _id: user._id, email: user.email }
       const token = jwt.sign({ user: body }, process.env.SECTER_KEY)
       return res.status(202).json({ success: true, token, user, role: 'user'})
@@ -33,12 +34,14 @@ const CMS = async (req, res, next) => {
     }else{
       let {images, storedImages} = req.body.data
       let merged=[]
-      if(storedImages.length !==0){
-        images.concat(storedImages)
-        merged = [...images, ...storedImages]
-        data.images=merged
+      if(storedImages !== undefined ){
+        if(storedImages.length !==0){
+          images.concat(storedImages)
+          merged = [...images, ...storedImages]
+          data.images=merged
+        }
       }
-
+      
       template = await TemplateModel.findOneAndUpdate({user:req.verified.user._id},data,{new: true})
     }
     return res.status(202).json({ success: true, template});
@@ -52,6 +55,7 @@ const fetchTemplate = async (req, res, next) => {
   try{
     let template = await TemplateModel.find({user: req.verified.user._id})
     if(template.length!==0){
+
     return res.status(202).json({ success: true, template});
     }else{
     return res.status(202).json({ success: false });
@@ -62,4 +66,21 @@ const fetchTemplate = async (req, res, next) => {
   }
 }
 
-module.exports = {login, CMS, fetchTemplate}
+const deleteImage = async (req, res, next) => {
+  try{
+    let template = await TemplateModel.find({user: req.verified.user._id})
+    if(template.length!==0){
+    let {images} = template[0]
+    images = images.filter((item, index) => index!==req.body.image)
+    template = await TemplateModel.findByIdAndUpdate({_id: template[0]._id},{images},{new: true})
+    
+    return res.status(202).json({ success: true, template});
+    }else{
+    return res.status(202).json({ success: false });
+    }
+  } catch (error) {
+  return res.status(202).json({ success: false, error: error.message });
+  }
+}
+
+module.exports = {login, CMS, fetchTemplate, deleteImage}
