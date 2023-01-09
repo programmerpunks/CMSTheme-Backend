@@ -12,6 +12,12 @@ const TemplateSchema = new mongoose.Schema({
   images: {
     type: Array
   },
+  contact:{
+    type: Object
+  },
+  social:{
+    type: Array
+  },
   team:{
     type: Array
   },
