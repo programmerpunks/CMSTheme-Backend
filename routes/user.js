@@ -10,5 +10,4 @@ router.post('/cms', CMS)
 router.post('/template', fetchTemplate)
 router.post('/delete-image', deleteImage)
 
-
 module.exports = router

@@ -30,6 +30,7 @@ const CMS = async (req, res, next) => {
 
     let template = await TemplateModel.find({user: req.verified.user._id})
     if(template.length===0){
+      req.body.data.user = req.verified.user._id
       template = await TemplateModel.create(req.body.data)
     }else{
       let {images, storedImages} = req.body.data
@@ -54,8 +55,8 @@ const CMS = async (req, res, next) => {
 const fetchTemplate = async (req, res, next) => {
   try{
     let template = await TemplateModel.find({user: req.verified.user._id})
+    
     if(template.length!==0){
-
     return res.status(202).json({ success: true, template});
     }else{
     return res.status(202).json({ success: false });
