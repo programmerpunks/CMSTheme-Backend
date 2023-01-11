@@ -11,12 +11,12 @@ const UserSchema = new mongoose.Schema({
   },
   firstname: { type: String, required: true, minLength: 2,
     match: [
-    /^[A-Za-z0-9 ]+$/,
+    /^[A-Za-z0-9 ]{0,50}$/,
     'Special characters not allowed',
   ],},
   lastname: { type: String, required: true, minLength: 2,
     match: [
-      /^[A-Za-z0-9 ]+$/,
+      /^[A-Za-z0-9 ]{0,50}$/,
       'Special characters not allowed',
     ]},
   password: {
@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema({
   profile_image: {
     type: String,
     match: [
-      /^[A-Za-z0-9 ]+$/,
+      /^[A-Za-z0-9 ]$/,
       'Special characters not allowed',
     ],
     
@@ -39,7 +39,7 @@ const UserSchema = new mongoose.Schema({
   expires: {
     type: String,
     match: [
-      /^[A-Za-z0-9 ]+$/,
+      /^[A-Za-z0-9 ]{0,50}$/,
       'Special characters not allowed',
     ],
   }
