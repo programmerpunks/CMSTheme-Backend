@@ -54,15 +54,27 @@ const login = async (req, res) => {
     )
   }
   catch (err) {
-    console.log(err.message)
+    return res.status(201).json({ message: false, error: err.message });
+    
   }
 }
 
 const registerUser = async (req, res) => {
-  const {firstName, lastName, email, password } = req.body
+  const {firstname, lastname, email, password } = req.body
+  try{
+    let user = await UserModel.findOne({email})
 
-  let user = await UserModel.create({firstName, lastName, email, password})
+    if(user){
+    return res.status(201).json({ message: false, error: 'User already exists' });
+  }
 
+    await UserModel.create({firstname, lastname, email, password})
+    return res.status(201).json({ message: true });
+  }
+  catch (err) {
+    return res.status(201).json({ message: false, error: err.message });
+    
+  }
 
 }
 

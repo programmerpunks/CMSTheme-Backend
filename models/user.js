@@ -7,24 +7,41 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    validate: [isEmail, 'invalid email'],
+    validate: [isEmail, 'Invalid email'],
   },
-  firstName: { type: String, required: true, minLength: 2 },
-  lastName: { type: String, required: true, minLength: 2 },
+  firstname: { type: String, required: true, minLength: 2,
+    match: [
+    /^[A-Za-z0-9 ]+$/,
+    'Special characters not allowed',
+  ],},
+  lastname: { type: String, required: true, minLength: 2,
+    match: [
+      /^[A-Za-z0-9 ]+$/,
+      'Special characters not allowed',
+    ]},
   password: {
     type: String,
     required: true,
     min: 8,
     match: [
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@$.!%*#?&]{8,}$/,
-      'Please enter a valid password',
+      'Please enter a password at least 8 character and contain At least one uppercase.At least one lower case. And one digit',
     ],
   },
   profile_image: {
-    type: String
+    type: String,
+    match: [
+      /^[A-Za-z0-9 ]+$/,
+      'Special characters not allowed',
+    ],
+    
   },
   expires: {
-    type: String
+    type: String,
+    match: [
+      /^[A-Za-z0-9 ]+$/,
+      'Special characters not allowed',
+    ],
   }
 
 })
