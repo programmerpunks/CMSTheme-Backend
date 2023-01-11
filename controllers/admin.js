@@ -1,26 +1,8 @@
-const AdminModel = require('../models/admin.js')
 const UserModel = require('../models/user.js')
 // const UserModel = require('../models/user.js')
 const dotenv = require ('dotenv')
 const jwt = require ('jsonwebtoken')
 dotenv.config()
-
-
-const register = async (req, res) => {
-  const { name, email, password } = req.body;
-  try {
-    if (await AdminModel.findOne({ email: email }).exec()) {
-      res.status(201).json({ message: false, error: 'Already Exists' });
-    }
-    else {
-      let admin = await AdminModel.create({ name, email, password });
-      res.status(201).json({ message: true, admin });
-    }
-  }
-  catch (err) {
-    console.log('err: ',err.message)
-  }
-}
 
 
 const login = async (req, res) => {
@@ -78,4 +60,4 @@ const registerUser = async (req, res) => {
 
 }
 
-module.exports = {register, login, registerUser}
+module.exports = {login, registerUser}
