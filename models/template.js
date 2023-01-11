@@ -4,16 +4,31 @@ const { isEmail } = require('validator')
 
 const TemplateSchema = new mongoose.Schema({
   title:{
-    type: String
-  }, 
+    type: String,
+    match: [
+      /^[A-Za-z0-9 ]+$/,
+      'Special characters not allowed',
+    ]}, 
   description:{
-    type: String
+    type: String,
+    match: [
+      /^[A-Za-z0-9 ]+$/,
+      'Special characters not allowed',
+    ]
   }, 
   images: {
-    type: Array
+    type: Array,
+    match: [
+      /^[A-Za-z0-9 ]+$/,
+      'Special characters not allowed',
+    ]
   },
   contact:{
-    type: Object
+    type: Object,
+    match: [
+      /^[A-Za-z0-9 ]+$/,
+      'Special characters not allowed',
+    ]
   },
   social:{
     type: Array
