@@ -1,26 +1,7 @@
 const UserModel = require('../models/user.js')
-// const UserModel = require('../models/user.js')
 const dotenv = require ('dotenv')
 const jwt = require ('jsonwebtoken')
 dotenv.config()
-
-
-const register = async (req, res) => {
-  const { email } = req.body;
-  try {
-    if (await UserModel.findOne({ email: email }).exec()) {
-      res.status(201).json({ message: false, error: 'Already Exists' });
-    }
-    else {
-      let admin = await UserModel.create(req.body);
-      res.status(201).json({ message: true, admin });
-    }
-  }
-  catch (err) {
-    console.log('err: ',err.message)
-  }
-}
-
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -53,9 +34,11 @@ const login = async (req, res) => {
     )
   }
   catch (err) {
-    console.log(err.message)
+    return res.status(201).json({ message: false, error: err.message });
+    
   }
 }
+
 
 const fetchUsers = async (req, res) => {
   try{
@@ -67,13 +50,21 @@ const fetchUsers = async (req, res) => {
 }
 
 const registerUser = async (req, res) => {
+  const {firstname, lastname, email, password } = req.body
   try{
-    let user = await UserModel.create(req.body.formData)
-    return res.status(201).json({ success: true })
-  }catch (error) {
-    return res.status(202).json({ success: false, error: error.message })
+    let user = await UserModel.findOne({email})
+
+    if(user){
+    return res.status(201).json({ message: false, error: 'User already exists' });
   }
-}
+
+    await UserModel.create({firstname, lastname, email, password})
+    return res.status(201).json({ message: true });
+  }
+  catch (err) {
+    return res.status(201).json({ message: false, error: err.message });
+    
+  }
 
 const deleteUser = async (req, res) => {
   try{
@@ -85,4 +76,4 @@ const deleteUser = async (req, res) => {
 }
 }
 
-module.exports = { register, login, registerUser, fetchUsers, deleteUser }
+module.exports = { login, registerUser, fetchUsers, deleteUser }
