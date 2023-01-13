@@ -6,27 +6,27 @@ const TemplateSchema = new mongoose.Schema({
   title:{
     type: String,
     match: [
-      /^[A-Za-z0-9 ]+$/,
+      /^[A-Za-z0-9 ]{0,50}$/,
       'Special characters not allowed',
     ]}, 
   description:{
     type: String,
     match: [
-      /^[A-Za-z0-9 ]+$/,
+      /^[A-Za-z0-9 ]{0,50}$/,
       'Special characters not allowed',
     ]
   }, 
   images: {
     type: Array,
     match: [
-      /^[A-Za-z0-9 ]+$/,
+      /^[A-Za-z0-9 ]{0,50}$/,
       'Special characters not allowed',
     ]
   },
   contact:{
     type: Object,
     match: [
-      /^[A-Za-z0-9 ]+$/,
+      /^[A-Za-z0-9 ]$/,
       'Special characters not allowed',
     ]
   },
