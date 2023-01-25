@@ -39,6 +39,9 @@ const TemplateSchema = new mongoose.Schema({
   user:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users'
+  },
+  analytics:{
+    type:Array
   }
 }, {timestamps: true})
 
