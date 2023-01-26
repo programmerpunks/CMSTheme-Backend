@@ -4,8 +4,8 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const userRoutes = require('./routes/user.js')
 const adminRoutes = require('./routes/admin.js')
-require('./service/db')
 require('dotenv').config()
+require('./service/db')
 
 const app = express()
 

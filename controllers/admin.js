@@ -1,9 +1,4 @@
 const UserModel = require('../models/user.js')
-// const UserModel = require('../models/user.js')
-const dotenv = require ('dotenv')
-const jwt = require ('jsonwebtoken')
-dotenv.config()
-
 
 const register = async (req, res) => {
   const { email } = req.body;
@@ -18,42 +13,6 @@ const register = async (req, res) => {
   }
   catch (err) {
     console.log('err: ',err.message)
-  }
-}
-
-
-const login = async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    let admin = await UserModel.findOne({ email: email })
-    if (!admin)
-      return res.status(201).json({ message: false, error: 'User not found' })
-
-
-    const validate = await admin.isValidPassword(password)
-    if (!validate) {
-      return res.status(201).json({ message: false, error: 'Wrong password' });
-    }
-
-    jwt.sign(
-      {
-        id: admin._id,
-        email: admin.email,
-        name: admin.name,
-      },
-      process.env.JWT_KEY,
-      { expiresIn: "3h" },
-      (err, token) => {
-        try {
-          return res.status(201).json({ message: true, token, role: 'admin',admin });
-        } catch (error) {
-          return res.status(202).json({ message: false, error: error.message });
-        }
-      }
-    )
-  }
-  catch (err) {
-    console.log(err.message)
   }
 }
 
@@ -85,4 +44,4 @@ const deleteUser = async (req, res) => {
 }
 }
 
-module.exports = { register, login, registerUser, fetchUsers, deleteUser }
+module.exports = { register, registerUser, fetchUsers, deleteUser }

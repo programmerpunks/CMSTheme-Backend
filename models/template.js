@@ -45,6 +45,4 @@ const TemplateSchema = new mongoose.Schema({
   }
 }, {timestamps: true})
 
-const TemplateModel = mongoose.model('templates', TemplateSchema, 'Template')
-
-module.exports = TemplateModel
+module.exports = mongoose.model('templates', TemplateSchema, 'Template')

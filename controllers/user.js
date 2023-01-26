@@ -15,8 +15,8 @@ const login = async (req, res, next) => {
       }
 
       const body = { _id: user._id, email: user.email }
-      const token = jwt.sign({ user: body }, process.env.SECTER_KEY)
-      return res.status(202).json({ success: true, token, user, role: 'user'})
+      const token = jwt.sign({ user: body }, process.env.SECRET_KEY)
+      return res.status(202).json({ success: true, token})
 
     } catch (error) {
       return next(error)
@@ -24,40 +24,39 @@ const login = async (req, res, next) => {
   })(req, res, next);
 }
 
-const CMS = async (req, res, next) => {
+const CMS = async (req, res) => {
   let {data} = req.body
   try{
-
-    let template = await TemplateModel.find({user: req.verified.user._id})
-    if(template.length===0){
+    let template = await TemplateModel.find({ user: req.verified.user._id })
+    if(template.length === 0){
       req.body.data.user = req.verified.user._id
       template = await TemplateModel.create(req.body.data)
     }else{
-      let {images, storedImages} = req.body.data
+      let { images, storedImages } = req.body.data
       let merged=[]
       if(storedImages !== undefined ){
-        if(storedImages.length !==0){
+        if(storedImages.length !== 0){            
           images.concat(storedImages)
           merged = [...images, ...storedImages]
           data.images=merged
         }
       }
       
-      template = await TemplateModel.findOneAndUpdate({user:req.verified.user._id},data,{new: true})
+      template = await TemplateModel.findOneAndUpdate({ user:req.verified.user._id},data,{new: true} )
     }
-    return res.status(202).json({ success: true, template});
+    return res.status(202).json({ success: true, template });
 
   } catch (error) {
   return res.status(202).json({ success: false, error: error.message });
   }
 }
 
-const fetchTemplate = async (req, res, next) => {
+const fetchTemplate = async (req, res) => {
   try{
     let template = await TemplateModel.find({user: req.verified.user._id})
-    
-    if(template.length!==0){
-    return res.status(202).json({ success: true, template});
+
+    if(template.length !== 0){
+    return res.status(202).json({ success: true, template });
     }else{
     return res.status(202).json({ success: false });
     }
@@ -67,15 +66,15 @@ const fetchTemplate = async (req, res, next) => {
   }
 }
 
-const deleteImage = async (req, res, next) => {
+const deleteImage = async (req, res) => {
   try{
     let template = await TemplateModel.find({user: req.verified.user._id})
     if(template.length!==0){
     let {images} = template[0]
-    images = images.filter((item, index) => index!==req.body.image)
-    template = await TemplateModel.findByIdAndUpdate({_id: template[0]._id},{images},{new: true})
+    images = images.filter((item, index) => index !== req.body.image)
+    template = await TemplateModel.findByIdAndUpdate( { _id: template[0]._id }, {images}, {new: true})
     
-    return res.status(202).json({ success: true, template});
+    return res.status(202).json({ success: true, template });
     }else{
     return res.status(202).json({ success: false });
     }

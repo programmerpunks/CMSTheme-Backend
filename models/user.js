@@ -33,17 +33,13 @@ const UserSchema = new mongoose.Schema({
 }, {timestamps: true})
 
 UserSchema.pre('save', async function (next) {
-  const user = this
-  const hash = await bcrypt.hash(user.password, 10)
+  const hash = await bcrypt.hash(this.password, 10)
   user.password = hash
 })
 
 UserSchema.methods.isValidPassword = async function (password) {
-  const user = this
-  const compare = await bcrypt.compare(password, user.password)
+  const compare = await bcrypt.compare(password, this.password)
 
   return compare
 }
-const UserModel = mongoose.model('users', UserSchema, 'Users')
-
-module.exports = UserModel
+module.exports = mongoose.model('users', UserSchema, 'Users')

@@ -4,6 +4,7 @@ const CustomStrategy = require('passport-custom').Strategy
 const jwt = require('jsonwebtoken')
 const UserModel = require('../models/user.js')
 const nodemailer = require('nodemailer')
+const { emailTemplate } = require('../templates/email.js')
 
 passport.use(
   'signup',
@@ -80,7 +81,6 @@ passport.use(
 
       });
       const expire = Date.now() + 3600000;
-      const resetCode = 1 + Math.floor(Math.random() * 10000);
 
       var mailOptions = {
         from: {
@@ -90,11 +90,7 @@ passport.use(
         to: user.email,
         subject: "Reset password link",
 
-        html: `<h1>You requested for password reset </h1><p>\
-                If you have requested to reset your password then use the code below to reset password for your account<br/>\
-                <h1>${resetCode}</h1><br/>\
-                This code will expire within 1 hour.<br/>\
-    </p>`
+        html: emailTemplate
       };
 
       transporter.sendMail(mailOptions, async function (error, info) {
@@ -116,11 +112,11 @@ exports.verifyToken = (req, res, next) => {
   let authHeader = req.headers.authorization
   try {
     let token = authHeader.split(' ')[1];
-    let verified = jwt.verify(token, process.env.SECTER_KEY, (err, verifiedJwt) => {
-      if (err) {
-        return false
-      } else {
+    let verified = jwt.verify(token, process.env.SECRET_KEY, (err, verifiedJwt) => {
+      try{
         return (verifiedJwt)
+      }catch(err){
+        return false
       }
     })
     req.verified = verified
@@ -130,4 +126,3 @@ exports.verifyToken = (req, res, next) => {
     res.status(202).json({ status: false, error: error.message })
   }
 }
-

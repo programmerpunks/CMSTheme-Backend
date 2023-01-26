@@ -1,5 +1,5 @@
 const express = require('express')
-const userValidation = require('../middleware/user_auth.js')
+const userValidation = require('../middleware/userAuth.js')
 const auth = require('../middleware/auth.js')
 const router = express.Router()
 const { login, CMS, fetchTemplate, deleteImage} = require('../controllers/user.js')
