@@ -21,7 +21,7 @@ const fetchUsers = async (req, res) => {
     const users = await UserModel.find()
     return res.status(201).json({ success: true, users })
   }catch (error) {
-    return res.status(202).json({ success: false, error: error.message })
+    return res.status(400).json({ error: error.message })
   }
 }
 
@@ -30,7 +30,7 @@ const registerUser = async (req, res) => {
     let user = await UserModel.create(req.body.formData)
     return res.status(201).json({ success: true })
   }catch (error) {
-    return res.status(202).json({ success: false, error: error.message })
+    return res.status(400).json({ error: error.message })
   }
 }
 
@@ -40,7 +40,7 @@ const deleteUser = async (req, res) => {
     return res.status(201).json({ success: true })
   }
   catch (error) {
-  return res.status(202).json({ success: false, error: error.message })
+  return res.status(400).json({ error: error.message })
 }
 }
 

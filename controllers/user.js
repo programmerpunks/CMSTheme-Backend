@@ -11,12 +11,12 @@ const login = async (req, res, next) => {
         const error = new Error(messages.message)
         let errors = []
         errors.push(error.message)
-        return res.status(202).json({ success: false, errors })
+        return res.status(400).json({ errors })
       }
 
       const body = { _id: user._id, email: user.email }
       const token = jwt.sign({ user: body }, process.env.SECRET_KEY)
-      return res.status(202).json({ success: true, token})
+      return res.status(202).json({ token})
 
     } catch (error) {
       return next(error)
@@ -44,10 +44,11 @@ const CMS = async (req, res) => {
       
       template = await TemplateModel.findOneAndUpdate({ user:req.verified.user._id},data,{new: true} )
     }
-    return res.status(202).json({ success: true, template });
+    return res.status(202).json({ template });
 
   } catch (error) {
-  return res.status(202).json({ success: false, error: error.message });
+    console.log('err: ', error.message)
+  return res.status(400).json({ error: error.message });
   }
 }
 
@@ -56,13 +57,13 @@ const fetchTemplate = async (req, res) => {
     let template = await TemplateModel.find({user: req.verified.user._id})
 
     if(template.length !== 0){
-    return res.status(202).json({ success: true, template });
+    return res.status(202).json({ template });
     }else{
-    return res.status(202).json({ success: false });
+    return res.status(400).json({ error: 'Template not found' });
     }
 
   } catch (error) {
-  return res.status(202).json({ success: false, error: error.message });
+  return res.status(400).json({ error: error.message });
   }
 }
 
@@ -74,12 +75,12 @@ const deleteImage = async (req, res) => {
     images = images.filter((item, index) => index !== req.body.image)
     template = await TemplateModel.findByIdAndUpdate( { _id: template[0]._id }, {images}, {new: true})
     
-    return res.status(202).json({ success: true, template });
+    return res.status(202).json({ template });
     }else{
-    return res.status(202).json({ success: false });
+      return res.status(400).json({ error:'Template not found'});
     }
   } catch (error) {
-  return res.status(202).json({ success: false, error: error.message });
+      return res.status(400).json({ error: error.message });
   }
 }
 
