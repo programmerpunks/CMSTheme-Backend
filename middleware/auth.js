@@ -123,6 +123,6 @@ exports.verifyToken = (req, res, next) => {
     next()
   } catch (err) {
     let error = new Error('You need to login first.')
-    res.status(202).json({ status: false, error: error.message })
+    res.status(400).json({ error: error.message })
   }
 }
