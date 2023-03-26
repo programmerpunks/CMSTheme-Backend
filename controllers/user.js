@@ -63,7 +63,7 @@ const fetchTemplate = async (req, res) => {
     if (template.length !== 0) {
       return res.status(202).json({ template });
     } else {
-      return res.status(400).json({ error: "Template not found" });
+      return res.status(202).json({ error: "Template not found" });
     }
   } catch (error) {
     return res.status(400).json({ error: error.message });
