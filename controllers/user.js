@@ -13,7 +13,7 @@ const login = async (req, res, next) => {
       }
       const body = { _id: user._id, email: user.email }
       const token = jwt.sign({ user: body }, process.env.SECTER_KEY)
-      return res.status(202).json({ token, user })
+      return res.status(202).json({ token, user, role: 'user'})
 
     } catch (error) {
       return next(error)
