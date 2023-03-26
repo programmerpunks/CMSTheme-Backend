@@ -11,6 +11,8 @@ const register = async (req, res) => {
     }
   } catch (err) {
     console.log("err: ", err.message);
+  }
+}
 
 const fetchUsers = async (req, res) => {
   try {
