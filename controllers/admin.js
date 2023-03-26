@@ -11,8 +11,6 @@ const register = async (req, res) => {
     }
   } catch (err) {
     console.log("err: ", err.message);
-  }
-};
 
 const fetchUsers = async (req, res) => {
   try {
@@ -22,6 +20,7 @@ const fetchUsers = async (req, res) => {
     return res.status(400).json({ error: error.message });
   }
 };
+
 
 const registerUser = async (req, res) => {
   try {
