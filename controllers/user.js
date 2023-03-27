@@ -13,6 +13,7 @@ const login = async (req, res, next) => {
           const error = new Error(messages.message);
           let errors = [];
           errors.push(error.message);
+          console.log("ff: ", errors);
           return res.status(400).json({ errors });
         }
 
